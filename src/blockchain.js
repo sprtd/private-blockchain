@@ -94,7 +94,7 @@ class Blockchain {
      */
     requestMessageOwnershipVerification(address) {
         return new Promise((resolve) => {
-            
+            resolve(`${address}:${new Date().getTime().toString().slice(0,-3)}:starRegistry`)
         });
     }
 
@@ -115,11 +115,13 @@ class Blockchain {
      * @param {*} signature 
      * @param {*} star 
      */
-    submitStar(address, message, signature, star) {
+
+
+     submitStar(address, message, signature, star) {
         let self = this;
         return new Promise(async (resolve, reject) => {
-            
-        });
+           
+        });     
     }
 
     /**
@@ -131,7 +133,18 @@ class Blockchain {
     getBlockByHash(hash) {
         let self = this;
         return new Promise((resolve, reject) => {
-           
+            try {
+               const blockResult = self.chain.find((b) => hash === b.hash)
+               if(blockResult) {
+                resolve(blockResult)
+               } else {
+                   reject(Error('no matching block found'))
+               }
+            } catch(err) {
+                reject(err)
+
+            }
+            
         });
     }
 
@@ -162,6 +175,14 @@ class Blockchain {
         let self = this;
         let stars = [];
         return new Promise((resolve, reject) => {
+            self.forEach(async (returnedBlock) => {
+                const blockResult = await returnedBlock.getBData()
+                if(blockResult.address === address) {
+                    stars.push(blockResult)
+                }
+            })
+
+            resolve(stars)
             
         });
     }
@@ -176,10 +197,18 @@ class Blockchain {
         let self = this;
         let errorLog = [];
         return new Promise(async (resolve, reject) => {
+
+            self.chain.forEach(block => {
+                if(!block.validate()) {
+                    errorLog.push(block)
+                }
+            })
+            resolve(errorLog)
             
         });
     }
 
+   
 }
 
 module.exports.Blockchain = Blockchain;   
