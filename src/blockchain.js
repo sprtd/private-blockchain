@@ -142,7 +142,7 @@ class Blockchain {
             } 
           
 
-            const block = new BlockClass.Block(data)
+            const block = new BlockClass.Block(blockData)
             await self._addBlock(block)
             resolve(block)
 
@@ -200,14 +200,19 @@ class Blockchain {
         let self = this;
         let stars = [];
         return new Promise((resolve, reject) => {
-            self.forEach(async (returnedBlock) => {
-                const blockResult = await returnedBlock.getBData()
-                if(blockResult.address === address) {
-                    stars.push(blockResult)
+            self.chain.forEach(async (returnedBlock) => {
+                try {
+                    const blockResult = await returnedBlock.getBData()
+                    if(blockResult && blockResult.address === address) {
+                        stars.push(blockResult)
+                        resolve(stars)
+                    }    
+                } catch(err) {
+                    reject(err)
                 }
+                
             })
 
-            resolve(stars)
             
         });
     }
