@@ -10,7 +10,7 @@ An `express.js` app whose endpoints are defined in `BlockchainController.js`.
 
 ###  Test 1: `getBlockByHeight`
 
-`GET - /block/height/0`
+`GET - {{ _.baseURL }}/block/height/0`
 The response shows the genesis block, block height 0 which is the precursor of subsequent blocks:
 ```json
 {
@@ -26,7 +26,7 @@ The response shows the genesis block, block height 0 which is the precursor of s
 ### Test 2: `requestOwnership`
 
 Endspoint generates a message with the following format `<WALLET_ADDRESS>:<TIME>:starRegistry`.  
-`POST - /block/height/0`
+`POST - {{ _.baseURL }}/requestValidation`
 ```
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -34,13 +34,13 @@ Endspoint generates a message with the following format `<WALLET_ADDRESS>:<TIME>
 }'
 ```
 Response:
-`"1KEniWgGgxyLUpiAHB7quKYiSbshP6QsS5:starRegistry"`
+`"1KEniWgGgxyLUpiAHB7quKYiSbshP6QsS5:1640298483:starRegistry"`
 
 
 
 ### Test 3: `submitStar`
 
-`POST - /submitstar`
+`POST - {{ _.baseURL }}/submitstar`
 
 ```
 --header 'Content-Type: application/json' \
@@ -71,7 +71,7 @@ This POST request returns the following response:
 
 ### Test 4: `getBlockByHash`
 
-`GET - block/hash/411bfc38c1666741784a3bb28f5c2a0174c4d348a80b537469284537798bd8ed`
+`GET - {{ _.baseURL }}/block/hash/590d3577dbe5c2391a1151028a04177983cc2ff16d38049da0fa1246001bc705`
 Response:
 ```json
 {
@@ -88,7 +88,7 @@ Response:
 
 ### Test 5: `getStarsByWalletAddress`
 Endpoints filters blocks signed by wallet addresses with valid stars:
-`GET - /blocks/1KEniWgGgxyLUpiAHB7quKYiSbshP6QsS5`
+`GET - {{ _.baseURL }}/blocks/1KEniWgGgxyLUpiAHB7quKYiSbshP6QsS5`
 
 The response shows block signed by the specific star address:
 ```json
